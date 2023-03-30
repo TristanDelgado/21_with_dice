@@ -15,10 +15,9 @@ private:
     int amount_of_die_to_role;
     bool lost = false;
 public:
-
     int turn;
     int total;
-    void getbet()
+    void get_bet()
     {
         bool passed = false;
         while(!passed)
@@ -34,6 +33,17 @@ public:
 
 
     }
+    int get_cash()
+    {
+        return cash;
+    }
+    void update_cash(int money)
+    {
+        cash += money;
+        if(cash <= 0)
+            lost = true;
+    }
+
     void choose_die()
     {
         bool passed = false;
@@ -48,12 +58,7 @@ public:
         }
 
     }
-    void update_cash(int money)
-    {
-    cash += money;
-    if(cash <= 0)
-        lost = true;
-    }
+
     bool player_status() const
     {
         if(lost)
@@ -61,7 +66,15 @@ public:
         else
             return false;
     }
-
+    void set_name()
+    {
+        cout << "Enter player's name: ";
+        cin >> name;
+    }
+    string get_name()
+    {
+        return name;
+    }
 
 
 };
