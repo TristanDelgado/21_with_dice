@@ -22,7 +22,7 @@ using namespace std;
  * The computer then clears the screen and starts a new game
  * the goal is to make it 10 rounds and make as much money as possible
  * starting with 50$
- *
+ * delete this
  *
  * every die role should physically show on the screen the die
  * the end goal is to make it so their can be several players playing at once, each making thier own bet,
