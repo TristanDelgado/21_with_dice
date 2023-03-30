@@ -1,2 +1,2 @@
 # dicegame
-A version of balckjack with dice instead of cards
+A version of balck-jack with dice instead of cards
