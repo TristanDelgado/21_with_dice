@@ -1,5 +1,6 @@
 #include <iostream>
 #include "die.h"
+#include "player.h"
 using namespace std;
 /*
  * Order of gameplay:
@@ -28,6 +29,7 @@ using namespace std;
  * and it plays just like blackjack
  */
 
+void player_info_display();
 
 
 int main() {
@@ -40,7 +42,28 @@ int main() {
         cout << "three times attempting to get as close to 21 as possible. My the odds be ever in your favor\n";
     }
 
-    cout << "How many players "
+    int num_players;
+    cout << "How many players: ";
+    cin >> num_players;
+    player * list_players_ptr = new player[num_players];
+    for(int i = 0; i < num_players; i++)
+    {
+        list_players_ptr[i].set_name();
+        cout << "Thank you, " << list_players_ptr[i].get_name();
+    }
+
+
+    for(int round = 1; round <= 10; round++)
+    {
+        cout << "round " << round << endl;
+        cout << "Hit enter when ready to start the next round";
+        cin.get();
+        for(int player = 0; player < num_players; player++)
+        {
+            cout << "Player: " << list_players_ptr[player].get_name();
+            cout << "Cash: " << list_players_ptr[player].get_cash();
+        }
+    }
 
 
     cout << "ALL FINISHED";
