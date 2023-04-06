@@ -1,10 +1,14 @@
+//
+// Created by conno on 4/5/2023.
+//
+
 #include <iostream>
 #include <string>
 
 using namespace std;
 
-#ifndef DICE_ROLE_PLAYER_H
-#define DICE_ROLE_PLAYER_H
+#ifndef INC_21_GAME_PLAYER_H
+#define INC_21_GAME_PLAYER_H
 
 class player
 {
@@ -15,8 +19,9 @@ private:
     int amount_of_die_to_role;
     bool lost = false;
 public:
-    int turn;
-    int total;
+    int turn = 1;
+    bool blackjack = false;
+    int total_score = 0;
     void get_bet()
     {
         bool passed = false;
@@ -29,9 +34,6 @@ public:
             else
                 passed = true;
         }
-
-
-
     }
     int get_cash()
     {
@@ -44,20 +46,22 @@ public:
             lost = true;
     }
 
-    void choose_die()
+    int choose_die()
     {
         bool passed = false;
         while(!passed)
         {
             cout << "Would you like to role 0, 1 or 2 die?\n";
+            cout << "Answer: ";
             cin >> amount_of_die_to_role;
             if(amount_of_die_to_role < 0 || amount_of_die_to_role > 3)
                 cout << "Error. Must input 1, 2, or 3. Try again:\n";
             else
                 passed = true;
         }
-
+        return amount_of_die_to_role;
     }
+
 
     bool player_status() const
     {
@@ -66,17 +70,17 @@ public:
         else
             return false;
     }
+
     void set_name()
     {
         cout << "Enter player's name: ";
         cin >> name;
     }
+
     string get_name()
     {
         return name;
     }
-
-
 };
 
-#endif //DICE_ROLE_PLAYER_H
+#endif //INC_21_GAME_PLAYER_H
