@@ -14,15 +14,69 @@ class player
 {
 private:
     string name;
-    int cash = 50;
+    int cash;
     int bet;
     int amount_of_die_to_role;
     bool lost = false;
 public:
-    int turn = 1;
-    bool blackjack = false;
-    int total_score = 0;
-    void get_bet()
+
+
+    int turn;
+    bool blackjack;
+    int total_score;
+
+    //Constructors====================================
+    player()
+    {
+        cash = 50;
+        lost = false;
+        blackjack = false;
+        total_score = 0;
+        turn = 1;
+    }
+
+
+
+
+
+
+
+    //Accessors========================================
+    int getCash()
+    {return cash;}
+
+    bool player_status() const
+    {
+        if(lost)
+            return true;
+        else
+            return false;
+    }
+
+    string getName()
+    {
+        return name;
+    }
+
+    int getBet()
+    {return bet;}
+
+
+
+
+    //Mutators========================================
+    void setName(string n)
+    {name = n;}
+
+    void updateCash(int money)
+    {
+        cash += money;
+        if(cash <= 0)
+            lost = true;
+    }
+
+
+    void setBet()
     {
         bool passed = false;
         while(!passed)
@@ -35,18 +89,10 @@ public:
                 passed = true;
         }
     }
-    int get_cash()
-    {
-        return cash;
-    }
-    void update_cash(int money)
-    {
-        cash += money;
-        if(cash <= 0)
-            lost = true;
-    }
 
-    int choose_die()
+
+
+    int chooseDie()
     {
         bool passed = false;
         while(!passed)
@@ -63,24 +109,10 @@ public:
     }
 
 
-    bool player_status() const
-    {
-        if(lost)
-            return true;
-        else
-            return false;
-    }
 
-    void set_name()
-    {
-        cout << "Enter player's name: ";
-        cin >> name;
-    }
 
-    string get_name()
-    {
-        return name;
-    }
+
+
 };
 
 #endif //INC_21_GAME_PLAYER_H

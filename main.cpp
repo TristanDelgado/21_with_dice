@@ -28,64 +28,144 @@ using namespace std;
  * the end goal is to make it so their can be several players playing at once, each making their own bet,
  * and it plays just like blackjack
  */
-
+int dealerAI();
 void player_info_display();
 
 
-int main() {
-    /*{
-        cout << "Here are the rules for the game:\n";
-        cout << "1. The goal is to beat the computer, closest to 21, like blackjack\n";
-        cout << "however some of the rules are difference. You will be using dice instead \n";
-        cout << "of cards. You get three roles. On each role you can role one or two dice.\n";
-        cout << "You also bet before each round. Your starting cash is $50. The computer also roles\n";
-        cout << "three times attempting to get as close to 21 as possible. My the odds be ever in your favor\n";
-    }*/
 
-    int num_players;
+int main() {
+
+    //Insert the instructions printer right here
+
+    //Initial player information to be gathered from 45->57
+    int numPlayers;
     cout << "How many players: ";
-    cin >> num_players;
-    player * list_players_ptr = new player[num_players];
-    for(int i = 0; i < num_players; i++)
+    cin >> numPlayers;
+    player * listPlayersPtr = new player[numPlayers]; //list of players
+    string playerName;
+    for(int i = 0; i < numPlayers; i++)
     {
-        list_players_ptr[i].set_name();
-        cout << "Thank you," << list_players_ptr[i].get_name() << endl;
+        cout << "Enter name of player: ";
+        cin >> playerName;
+        listPlayersPtr[i].setName(playerName);
+        cout << "Thank you, " << listPlayersPtr[i].getName() << endl;
     }
 
+
+    //Game starts
     int amount_of_die_rolled;
-    int score;
+    int playerScore;
+    int dealerScore;
     die dice;
-    for(int round = 1; round <= 10; round++)
-    {
+    for(int round = 1; round <= 3; round++) {
         cout << "Round " << round << ":" << endl;
         cout << "Hit enter when ready to start the next round: " << endl;
         cin.ignore();
         cin.get();
-        for(int player = 0; player < num_players; player++)
-        {
-            cout << "Player: " << list_players_ptr[player].get_name() << endl;
-            cout << "Cash: $" << list_players_ptr[player].get_cash() << endl;
-            list_players_ptr[player].get_bet();
-            for(;list_players_ptr[player].turn < 4;list_players_ptr[player].turn++)
-            {
-                amount_of_die_rolled = list_players_ptr[player].choose_die();
-                dice.role_die(amount_of_die_rolled);
-                score = dice.get_die_role();
-                if(score == 0) //This means if the player chooses to not role then their turn is over
-                    exit;      //this will exit the loop and move on to the next person
-                list_players_ptr[player].total_score += score;
-                cout << "You rolled a(n) " << dice.get_die_role() << endl;
-                cout << "Your total score is " << list_players_ptr[player].total_score << endl;
-            } //todo pretty much works for input and getting the dice role, however the algorithm for the computer's role
-            //todo needs to be created
-            //todo bug test a lot of the steps
 
+
+        //The players enter their bets and then role the dice 73->89
+        for (int player = 0; player < numPlayers; player++) {
+            cout << "Player: " << listPlayersPtr[player].getName() << endl;
+            cout << "Cash: $" << listPlayersPtr[player].getCash() << endl;
+            listPlayersPtr[player].setBet();
+
+                for (; listPlayersPtr[player].turn < 4; listPlayersPtr[player].turn++)
+                {
+                    amount_of_die_rolled = listPlayersPtr[player].chooseDie();
+                    if (amount_of_die_rolled == 0) //This means if the player chooses to not role then their turn is over
+                    {
+                        listPlayersPtr[player].turn = 4;
+                        continue;
+                    }
+                    dice.roleDie(amount_of_die_rolled);
+                    playerScore = dice.getDieRole();
+                    listPlayersPtr[player].total_score += playerScore;
+                    dice.dieFacePrinter();
+                    cout << "You rolled " << dice.getDieRole() << endl;
+                    cout << "Your total score is " << listPlayersPtr[player].total_score << endl << endl;
+                }
         }
+
+        //AI dealer get its own score
+        dealerScore = dealerAI();
+        cout << "The dealer rolled a " << dealerScore << endl;
+
+        //Comparison of AI to all players
+        for (int player = 0; player < numPlayers; player++)
+        {
+            if(listPlayersPtr[player].total_score > dealerScore)
+            {
+                listPlayersPtr[player].updateCash(listPlayersPtr[player].getBet()); //Adds the players bet to cash if their score is better than the dealers
+                cout << listPlayersPtr[player].getName();
+                cout << ", you have won $" << listPlayersPtr[player].getBet() << endl;
+                cout << "Your total cash is now $" << listPlayersPtr[player].getCash() << endl;
+            }
+            else if(listPlayersPtr[player].total_score < dealerScore)
+            {
+                listPlayersPtr[player].updateCash((0 - listPlayersPtr[player].getBet())); //Makes the bet negative to take away the cash
+                cout << listPlayersPtr[player].getName();
+                cout << ", you have lost $" << listPlayersPtr[player].getBet() << endl;
+                cout << "Your total cash is now $" << listPlayersPtr[player].getCash() << endl;
+            }
+            else //This would mean the scores are equal
+            {
+                cout << listPlayersPtr[player].getName();
+                cout << ", you and the dealer tied, therefore no money exchanges hands." << endl;
+            }
+        }
+        cout << "That is the end of round " << round << endl;
     }
 
 
+
+
+
     cout << "ALL FINISHED";
-
-
     return 0;
 }
+
+
+
+
+
+
+
+
+
+
+
+int dealerAI() //Add the AI visual output
+{
+    die squares;
+    int score = 0;
+    for(int roles = 1; roles < 4; roles++)
+    {
+        if(score < 10) //This number can be changed to better suit the AI depending on the win to loss ratio
+        {
+            squares.roleDie(2);
+            score += squares.getDieRole();
+        }
+        else
+        {
+            squares.roleDie(1);
+            score += squares.getDieRole();
+        }
+    }
+    if(score > 21)
+        score = 0;
+    return score;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
